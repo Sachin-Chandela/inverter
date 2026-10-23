@@ -1,18 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { render } from 'preact'
 import './index.css'
 import App from './App.jsx'
 import './css/Login.css'
 
-
 import { BrowserRouter } from 'react-router-dom'
 
-createRoot(document.getElementById('root')).render(
+render(
   <BrowserRouter>
-    <App/>
-  </BrowserRouter>
-
-  // tre
-  
-  
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root')
 )
