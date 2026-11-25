@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { check_token } from '../auth/Auth_token.jsx';
+import { check_token, get_token } from '../auth/Auth_token.jsx';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -30,11 +30,15 @@ const Remote_Server = () => {
             // i ca add other thing is that if it doesnot fetch the token status then just get the token from the session
             // and compare
             // await check_token(navigate);
+            const token=await get_token(navigate);
 
-            const response = await fetch("/api/config/remote-server", {
-                // headers: { 'Authorization': `Bearer ${token}` }
-                headers:{'Content-Type': 'application/json'},
-            });
+            if(!token || token==-1){
+                return;
+            }
+
+            const response=await fetch("/api/config/remote-server",{
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
 
             if (!response.ok) {
                 console.log(`Server responded with status: ${response.status}`);
@@ -90,13 +94,19 @@ const Remote_Server = () => {
             // const token = await check_token(navigate);  unComment it if header is bearrer token for urlencoded
             // and this is what they asked in the pdf the urlencoded so use the 
             // headers: { 'Authorization': `Bearer ${token}` },
-            await check_token(navigate);
+            // await check_token(navigate);
+            const token=await get_token(navigate);
+            if(!token || token==-1){
+                return;
+            }
 
             const response = await fetch("/api/config/remote-server", {
                 method: 'POST',
                 // the spec wants form-urlencoded (not JSON), the browser sets the Content-Type itself
                 // headers: { 'Authorization': `Bearer ${token}` },
-                headers:{'Content-Type': 'application/json'},
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/x-www-form-urlencoded'},
                 body: new URLSearchParams({
                     server_url: server_url,
                     server_port: server_port,

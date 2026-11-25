@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react'
-import { check_token } from '../auth/Auth_token.jsx';
+import { check_token, get_token } from '../auth/Auth_token.jsx';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -39,11 +39,16 @@ export const Isp = () => {
 
             // await check_token(navigate);
 
+            const token=await get_token(navigate);  // this get_token will call the check_token itself
+
+            if(!token || token==-1){
+                return;
+            }
+
 
             
             const response=await fetch("/api/config/isp",{
-                // headers: { 'Authorization': `Bearer ${token}` }
-                headers:{'Content-Type': 'application/json'},
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (!response.ok) {
@@ -65,9 +70,9 @@ export const Isp = () => {
             }
 
             set_apn(res.Data.apn);
-            set_sim(res.Data.set_sim);
+            set_sim(res.Data.current_sim);
             set_username(res.Data.username);
-            set_password(res.Data.set_password);
+            set_password(res.Data.password);
         }
         catch(err){
             console.log(err.message);
@@ -93,21 +98,24 @@ export const Isp = () => {
 
 
             // await check_token(navigate);
+            const token=await get_token(navigate);
+            if(!token || token==-1){
+                return;
+            }
 
 
 
             const response=await fetch("/api/config/isp",{
                 method:'POST',
-                headers:{'Content-Type': 'application/json'},
-                body:JSON.stringify({
-                    Flag:true,
-                    Message:"success",
-                    Data:{
-                        apn:apn,
-                        current_sim:sim,
-                        username:username,
-                        password:password,
-                    }
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    apn: apn,
+                    current_sim: sim,
+                    username: username,
+                    password: password
                 })
             })
 
@@ -132,7 +140,7 @@ export const Isp = () => {
 
             
 
-            const res=response.json();
+            const res=await response.json();
 
             if(!res.Flag){
                 console.log("Flag is not set")

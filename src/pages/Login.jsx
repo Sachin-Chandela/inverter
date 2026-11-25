@@ -42,8 +42,8 @@ const Login = () => {
       }
       if (!response.ok) {
         setError("Server error, try again");
-        navigate("/config");
-        // return;
+        // navigate("/config");
+        return;
       }
 
       const result = await response.json();

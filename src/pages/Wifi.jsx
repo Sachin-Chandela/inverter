@@ -31,7 +31,7 @@ const Wifi = () => {
 
         try{
             
-            // const token=await get_token(navigate);
+            const token=await get_token(navigate);
 
             // unComment the upper code for final call
             // const token=12121311

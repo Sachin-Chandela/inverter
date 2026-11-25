@@ -7,7 +7,7 @@ const Certificate = () => {
 
     const navigate=useNavigate();
 
-    let URL="write.html";
+    let URL="/write.html";
 
 
     const [message, setMessage] = useState("");
@@ -31,8 +31,8 @@ const Certificate = () => {
         return res.Data?.status ?? null;
     }
 
-    async function establish_connection() {
-        const token=get_token(navigate);
+    async function establish_connection(token) {
+        // const token=await get_token(navigate);
         const headers = { Authorization: `Bearer ${token}` };
 
         // Step 1: trigger (no body needed)
@@ -72,11 +72,13 @@ const Certificate = () => {
     }
 
 
-    async function upload(file,filename){
+    async function upload(file,filename,token){
 
         // to get the file name use the file.name
 
         const url=`${URL}?filename=${filename}`;
+
+
 
         try{
             const text = await file.text();
@@ -84,7 +86,8 @@ const Certificate = () => {
             const response=await fetch(url,{
                 method:'POST',
                 headers:{
-                    "Content-Type":"Text/plain"
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type":"text/plain"
                 },
                 body:text
 
@@ -127,15 +130,19 @@ const Certificate = () => {
         }
 
 
-        // await check_token(navigate);
+        const token=get_token(navigate);
 
-        if (!(await upload(file1, "rootCA.pem"))) return;
-        if (!(await upload(file2, "client.pem"))) return;
-        if (!(await upload(file3, "key.pem"))) return;
+        if(!token || token==-1){
+            return;
+        }
+
+        if (!(await upload(file1, "rootCA.pem",token))) return;
+        if (!(await upload(file2, "client.pem",token))) return;
+        if (!(await upload(file3, "key.pem",token))) return;
 
         console.log("All files are upladed");
 
-        establish_connection();
+        establish_connection(token);
 
     }
 
