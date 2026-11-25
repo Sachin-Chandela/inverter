@@ -18,9 +18,10 @@ export async function get_token(navigate){
 
     // first i will check whether the token is valid and not expired i can do this in the wifi page only but its good here
 
-    
+    console.log("in the get_token function");
 
     const temp=await check_token(navigate);
+    console.log("the temp is ",temp);
     if(!temp){
         return -1;
     }
@@ -42,6 +43,8 @@ export async function check_token(navigate){
 
     try{
 
+        console.log("In the check_token function");
+
         // get the token from the session id
         const response1=sessionStorage.getItem('token');
 
@@ -53,6 +56,8 @@ export async function check_token(navigate){
 
         const res1=JSON.parse(response1);
         const token=res1.token;
+
+        console.log("the token is in check_token",token);
 
 
         // i will post the token  and in return it will check the time for me through the token only
@@ -74,10 +79,13 @@ export async function check_token(navigate){
         }
         const res=await response.json();
 
+        console.log("the res is ",res);
+
         if(res.flag){
             return true;
         }
         else{
+            console.log("in the res.flag there is some error");
             navigate("/");
             return false;
 

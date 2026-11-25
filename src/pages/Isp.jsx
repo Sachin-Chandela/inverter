@@ -37,11 +37,14 @@ export const Isp = () => {
     async function on_start(){
         try{
 
+            console.log("On the ISP page")
+
             // await check_token(navigate);
 
             const token=await get_token(navigate);  // this get_token will call the check_token itself
 
             if(!token || token==-1){
+                console.log("The Token is in the isp page is",token);
                 return;
             }
 
