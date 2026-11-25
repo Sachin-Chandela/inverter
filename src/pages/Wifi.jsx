@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'preact/hooks'
 import { check_token, get_token } from '../auth/Auth_token.jsx';
 import { useNavigate } from 'react-router-dom';
 
