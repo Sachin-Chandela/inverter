@@ -65,7 +65,7 @@ export async function check_token(navigate){
 
         const response=await fetch("/api/auth/status",{
             headers:{
-                "Authorization":`Bearer${token}`
+                "Authorization":`Bearer ${token}`
             }
         });
         if(response.status===401){
@@ -81,7 +81,7 @@ export async function check_token(navigate){
 
         console.log("the res is ",res);
 
-        if(res.flag){
+        if(res.Flag){
             return true;
         }
         else{

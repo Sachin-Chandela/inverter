@@ -47,6 +47,8 @@ const Login = () => {
       }
 
       const result = await response.json();
+      // console.log(result);
+      console.log(" the data is ",result.Data)
 
       if (result.Flag && result.Data?.token) {
         saveSession(result.Data.token, result.Data.valid_for); // 1800 s
